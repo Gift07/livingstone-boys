@@ -19,10 +19,12 @@ if (!globalForMongoose.mongoose) {
 }
 
 export async function connectDB() {
-  const uri = process.env.MONGODB_URI;
+  const uri = process.env.MONGODB_URI?.trim() || process.env.MONGODB_URL?.trim();
 
   if (!uri) {
-    throw new Error("Missing MONGODB_URI. Add it to .env.local.");
+    throw new Error(
+      "Missing MONGODB_URI. Add it to .env.local locally, or to Environment Variables in Vercel.",
+    );
   }
 
   if (cached.conn) {
