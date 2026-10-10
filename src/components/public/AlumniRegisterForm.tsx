@@ -3,14 +3,16 @@
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import SchoolLogo from "@/components/brand/SchoolLogo";
+import { tanzaniaRegions } from "@/lib/regions";
 import { school } from "@/lib/school";
 
 const emptyForm = {
   firstName: "",
   lastName: "",
   email: "",
+  phoneNumber: "",
   graduationYear: "",
-  college: "",
+  region: "",
   work: "",
   company: "",
 };
@@ -85,8 +87,9 @@ export default function AlumniRegisterForm() {
           Claim your place in the directory
         </h1>
         <p className="mt-3 text-[15px] leading-7 text-neutral-600">
-          Old boys can add the college they attended and the work they are doing
-          now. After you register, classmates can find you on the public search.
+          Old boys can add the region they work in, their phone number, and the
+          work they are doing now. After you register, classmates can find you
+          on the public search.
         </p>
 
         {done ? (
@@ -135,6 +138,17 @@ export default function AlumniRegisterForm() {
               />
             </label>
             <label className="block text-sm font-medium">
+              Phone number
+              <input
+                required
+                type="tel"
+                value={form.phoneNumber}
+                onChange={(event) => update("phoneNumber", event.target.value)}
+                placeholder="+255 754 123 456"
+                className={fieldClass}
+              />
+            </label>
+            <label className="block text-sm font-medium">
               Graduation year
               <input
                 required
@@ -145,13 +159,20 @@ export default function AlumniRegisterForm() {
               />
             </label>
             <label className="block text-sm font-medium">
-              College attended
-              <input
+              Region
+              <select
                 required
-                value={form.college}
-                onChange={(event) => update("college", event.target.value)}
+                value={form.region}
+                onChange={(event) => update("region", event.target.value)}
                 className={fieldClass}
-              />
+              >
+                <option value="">Select region</option>
+                {tanzaniaRegions.map((region) => (
+                  <option key={region} value={region}>
+                    {region}
+                  </option>
+                ))}
+              </select>
             </label>
             <label className="block text-sm font-medium">
               Work you are doing now
@@ -159,14 +180,17 @@ export default function AlumniRegisterForm() {
                 required
                 value={form.work}
                 onChange={(event) => update("work", event.target.value)}
+                placeholder="Works at a regional hospital"
                 className={fieldClass}
               />
             </label>
             <label className="block text-sm font-medium">
-              Company <span className="font-normal text-neutral-400">(optional)</span>
+              Workplace{" "}
+              <span className="font-normal text-neutral-400">(optional)</span>
               <input
                 value={form.company}
                 onChange={(event) => update("company", event.target.value)}
+                placeholder="Amana Regional Hospital"
                 className={fieldClass}
               />
             </label>

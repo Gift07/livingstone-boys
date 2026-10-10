@@ -36,7 +36,7 @@ function SearchForm({ query }: { query: string }) {
           type="search"
           name="q"
           defaultValue={query}
-          placeholder="Search by name, class, college, or work"
+          placeholder="Search by name, class, region, or work"
           className="h-12 w-full rounded-full border border-neutral-200 bg-[#f7f7f7] px-11 text-[15px] outline-none ring-[#1B7A32]/20 placeholder:text-neutral-400 focus:bg-white focus:ring-2"
         />
       </label>
@@ -150,7 +150,7 @@ export function PublicChrome({ children }: { children: React.ReactNode }) {
           <Link href="/register" className="text-[#1B7A32] underline">
             register
           </Link>{" "}
-          to add their college and work.
+          to add their region, work, and phone number.
         </p>
         {children}
         <nav className="mt-14 space-y-8 border-t border-neutral-200 pt-10">

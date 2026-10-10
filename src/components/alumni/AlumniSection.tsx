@@ -15,14 +15,16 @@ import {
 } from "@/components/ui/Table";
 import Initials from "@/components/ui/Initials";
 import { fullName } from "@/lib/format";
+import { tanzaniaRegions } from "@/lib/regions";
 
 type Alumnus = {
   _id: string;
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   graduationYear: string;
-  college: string;
+  region: string;
   work: string;
   company?: string;
 };
@@ -31,8 +33,9 @@ const emptyForm = {
   firstName: "",
   lastName: "",
   email: "",
+  phoneNumber: "",
   graduationYear: "",
-  college: "",
+  region: "",
   work: "",
   company: "",
 };
@@ -120,7 +123,7 @@ export default function AlumniSection() {
     <div>
       <PageHeader
         title="Alumni"
-        description="Graduates, the colleges they attended, and the work they do now."
+        description="Graduates, where they work now, and how classmates can reach them."
         action={
           <button
             type="button"
@@ -140,26 +143,27 @@ export default function AlumniSection() {
       ) : null}
 
       <Card className="overflow-hidden p-0">
-        <Table minWidth="760px">
+        <Table minWidth="860px">
           <thead className={theadClass}>
             <tr>
               <th className={thClass}>Name</th>
               <th className={thClass}>Year</th>
-              <th className={thClass}>College</th>
+              <th className={thClass}>Region</th>
               <th className={thClass}>Work now</th>
+              <th className={thClass}>Phone</th>
               <th className={thClass}>Action</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr className={trClass}>
-                <td colSpan={5} className={`${tdClass} text-gray-500`}>
+                <td colSpan={6} className={`${tdClass} text-gray-500`}>
                   Loading...
                 </td>
               </tr>
             ) : alumni.length === 0 ? (
               <tr className={trClass}>
-                <td colSpan={5} className={`${tdClass} text-gray-500`}>
+                <td colSpan={6} className={`${tdClass} text-gray-500`}>
                   No graduates yet. Open the sidesheet to add one.
                 </td>
               </tr>
@@ -178,11 +182,12 @@ export default function AlumniSection() {
                     </div>
                   </td>
                   <td className={tdClass}>{person.graduationYear}</td>
-                  <td className={tdClass}>{person.college}</td>
+                  <td className={tdClass}>{person.region || "—"}</td>
                   <td className={tdClass}>
                     {person.work}
                     {person.company ? ` · ${person.company}` : ""}
                   </td>
+                  <td className={tdClass}>{person.phoneNumber || "—"}</td>
                   <td className={tdClass}>
                     <button
                       type="button"
@@ -203,7 +208,7 @@ export default function AlumniSection() {
       <SideSheet
         open={open}
         title="Add graduate"
-        description="Save a former student, their college, and current work."
+        description="Save a former student, the region they work in, and their phone number."
         onClose={() => setOpen(false)}
       >
         <form onSubmit={onSubmit} className="flex flex-col gap-3">
@@ -237,6 +242,16 @@ export default function AlumniSection() {
           />
           <input
             required
+            type="tel"
+            className={fieldClass}
+            placeholder="Phone number, e.g. +255 754 123 456"
+            value={form.phoneNumber}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, phoneNumber: event.target.value }))
+            }
+          />
+          <input
+            required
             className={fieldClass}
             placeholder="Graduation year"
             value={form.graduationYear}
@@ -247,19 +262,25 @@ export default function AlumniSection() {
               }))
             }
           />
-          <input
+          <select
             required
             className={fieldClass}
-            placeholder="College they went to"
-            value={form.college}
+            value={form.region}
             onChange={(event) =>
-              setForm((current) => ({ ...current, college: event.target.value }))
+              setForm((current) => ({ ...current, region: event.target.value }))
             }
-          />
+          >
+            <option value="">Select region</option>
+            {tanzaniaRegions.map((region) => (
+              <option key={region} value={region}>
+                {region}
+              </option>
+            ))}
+          </select>
           <input
             required
             className={fieldClass}
-            placeholder="Work they are doing now"
+            placeholder="Work they are doing now, e.g. Works at a regional hospital"
             value={form.work}
             onChange={(event) =>
               setForm((current) => ({ ...current, work: event.target.value }))
@@ -267,7 +288,7 @@ export default function AlumniSection() {
           />
           <input
             className={fieldClass}
-            placeholder="Company (optional)"
+            placeholder="Workplace (optional)"
             value={form.company}
             onChange={(event) =>
               setForm((current) => ({ ...current, company: event.target.value }))

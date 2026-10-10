@@ -28,9 +28,10 @@ export async function searchPublicDirectory(
         $or: [
           { firstName: pattern },
           { lastName: pattern },
-          { college: pattern },
+          { region: pattern },
           { work: pattern },
           { company: pattern },
+          { phoneNumber: pattern },
           { graduationYear: pattern },
         ],
       })
@@ -65,7 +66,7 @@ export async function searchPublicDirectory(
       kind: "alumni" as const,
       name: `${alumnus.firstName} ${alumnus.lastName}`,
       year: alumnus.graduationYear,
-      detail: [alumnus.college, alumnus.work, alumnus.company]
+      detail: [alumnus.work, alumnus.company, alumnus.region]
         .filter(Boolean)
         .join(" · "),
     })),

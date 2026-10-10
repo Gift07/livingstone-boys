@@ -19,12 +19,28 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { firstName, lastName, email, graduationYear, college, work, company } =
-      body;
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      graduationYear,
+      region,
+      work,
+      company,
+    } = body;
 
-    if (!firstName || !lastName || !email || !graduationYear || !college || !work) {
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !phoneNumber ||
+      !graduationYear ||
+      !region ||
+      !work
+    ) {
       return jsonError(
-        "firstName, lastName, email, graduationYear, college, and work are required",
+        "firstName, lastName, email, phoneNumber, graduationYear, region, and work are required",
       );
     }
 
@@ -33,8 +49,9 @@ export async function POST(request: Request) {
         firstName,
         lastName,
         email,
+        phoneNumber,
         graduationYear,
-        college,
+        region,
         work,
         company: company || undefined,
       }),
