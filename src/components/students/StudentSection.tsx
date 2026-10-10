@@ -22,7 +22,6 @@ type Student = {
   lastName: string;
   email: string;
   grade: string;
-  gender?: string;
 };
 
 type Subject = {
@@ -50,7 +49,6 @@ export default function StudentSection() {
     lastName: "",
     email: "",
     grade: "",
-    gender: "Male",
   });
   const [subjectForm, setSubjectForm] = useState({
     name: "",
@@ -134,7 +132,7 @@ export default function StudentSection() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Could not save student");
-      setStudentForm({ firstName: "", lastName: "", email: "", grade: "", gender: "Male" });
+      setStudentForm({ firstName: "", lastName: "", email: "", grade: "" });
       setSheet(null);
       await refresh();
     } catch (err) {
@@ -223,20 +221,19 @@ export default function StudentSection() {
                 <th className={thClass}>Name</th>
                 <th className={thClass}>Email</th>
                 <th className={thClass}>Grade</th>
-                <th className={thClass}>Gender</th>
                 <th className={thClass}>Action</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr className={trClass}>
-                  <td colSpan={5} className={`${tdClass} text-gray-500`}>
+                  <td colSpan={4} className={`${tdClass} text-gray-500`}>
                     Loading...
                   </td>
                 </tr>
               ) : students.length === 0 ? (
                 <tr className={trClass}>
-                  <td colSpan={5} className={`${tdClass} text-gray-500`}>
+                  <td colSpan={4} className={`${tdClass} text-gray-500`}>
                     No students yet.
                   </td>
                 </tr>
@@ -251,7 +248,6 @@ export default function StudentSection() {
                     </td>
                     <td className={tdClass}>{student.email}</td>
                     <td className={tdClass}>{student.grade}</td>
-                    <td className={tdClass}>{student.gender || "—"}</td>
                     <td className={tdClass}>
                       <button
                         type="button"
@@ -365,17 +361,6 @@ export default function StudentSection() {
               setStudentForm((current) => ({ ...current, grade: event.target.value }))
             }
           />
-          <select
-            required
-            className={fieldClass}
-            value={studentForm.gender}
-            onChange={(event) =>
-              setStudentForm((current) => ({ ...current, gender: event.target.value }))
-            }
-          >
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
           <button
             type="submit"
             disabled={saving}

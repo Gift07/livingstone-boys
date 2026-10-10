@@ -19,7 +19,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { firstName, lastName, email, grade, gender, dateOfBirth } = body;
+    const { firstName, lastName, email, grade, dateOfBirth } = body;
 
     if (!firstName || !lastName || !email || !grade) {
       return jsonError("firstName, lastName, email, and grade are required");
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
         lastName,
         email,
         grade,
-        gender: gender || undefined,
+        gender: "Male",
         dateOfBirth: dateOfBirth || undefined,
       }),
     );

@@ -26,7 +26,7 @@ const emptyChart = {
 
 export default function Dashboard() {
   const [stats, setStats] = useState(emptyStats);
-  const [gender, setGender] = useState({ male: 0, female: 0 });
+  const [grades, setGrades] = useState<{ grade: string; count: number }[]>([]);
   const [chart, setChart] = useState(emptyChart);
   const [stars, setStars] = useState<StarStudent[]>([]);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
@@ -39,7 +39,7 @@ export default function Dashboard() {
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || "Could not load dashboard");
         setStats(data.stats);
-        setGender(data.gender);
+        setGrades(data.grades || []);
         setChart(data.chart);
         setStars(data.stars);
         setActivity(data.activity);
@@ -64,7 +64,7 @@ export default function Dashboard() {
       <StatCards stats={stats} />
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.55fr)_minmax(300px,0.85fr)]">
         <ExamChart months={chart.months} exams={chart.exams} results={chart.results} />
-        <StudentsDonut male={gender.male} female={gender.female} />
+        <StudentsDonut total={stats.students} grades={grades} />
       </div>
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.55fr)_minmax(300px,0.85fr)]">
         <StarStudents students={stars} />

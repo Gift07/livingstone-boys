@@ -12,7 +12,7 @@ const StudentSchema = new Schema(
       trim: true,
     },
     grade: { type: String, required: true, trim: true },
-    gender: { type: String, enum: ["Male", "Female"], trim: true },
+    gender: { type: String, enum: ["Male"], default: "Male", trim: true },
     dateOfBirth: { type: Date },
   },
   { timestamps: true },

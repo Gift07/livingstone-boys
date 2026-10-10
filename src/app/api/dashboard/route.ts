@@ -54,7 +54,7 @@ export async function GET() {
         accounts,
         examRecords,
         yearResults,
-        genderRows,
+        gradeRows,
         stars,
         notices,
         latestResults,
@@ -67,7 +67,8 @@ export async function GET() {
         RecordItem.find({ module: "exams", createdAt: { $gte: start } }).lean(),
         Result.find({ createdAt: { $gte: start } }).select("createdAt").lean(),
         Student.aggregate<{ _id: string | null; count: number }>([
-          { $group: { _id: "$gender", count: { $sum: 1 } } },
+          { $group: { _id: "$grade", count: { $sum: 1 } } },
+          { $sort: { _id: 1 } },
         ]),
         Result.aggregate([
           {
@@ -132,11 +133,10 @@ export async function GET() {
         examsByMonth[monthIndex(new Date(row.createdAt))] += 1;
       }
 
-      const gender = { male: 0, female: 0 };
-      for (const row of genderRows) {
-        if (row._id === "Female") gender.female += row.count;
-        else if (row._id === "Male") gender.male += row.count;
-      }
+      const grades = gradeRows.map((row) => ({
+        grade: row._id || "Unassigned",
+        count: row.count,
+      }));
 
       const activity = [
         ...notices.map((notice) => {
@@ -167,7 +167,7 @@ export async function GET() {
 
       return {
         stats: { students, teachers, parents, earnings, alumni },
-        gender,
+        grades,
         chart: {
           year,
           months: months.map((label) => label.slice(0, 3)),
